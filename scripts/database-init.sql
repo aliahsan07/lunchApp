@@ -11,7 +11,6 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 -- Schema lunchApp
 -- -----------------------------------------------------
-DROP database IF EXISTS `lunchApp`;
 CREATE SCHEMA IF NOT EXISTS `lunchApp` DEFAULT CHARACTER SET utf8 ;
 USE `lunchApp` ;
 
@@ -74,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `lunchApp`.`food_item` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(255) NOT NULL,
   `price` INT(11) NOT NULL,
-  `status` BIT(1) NULL,
+  `status` SMALLINT(6) NULL,
   `vendor_id` BIGINT(20) UNSIGNED NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_vendor_idx` (`vendor_id` ASC),

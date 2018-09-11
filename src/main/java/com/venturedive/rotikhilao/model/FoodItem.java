@@ -19,7 +19,10 @@ public class FoodItem {
     @Column(name="price")
     private Integer price;
 
-    @Column(name="owner")
-    private String owner;
+    @Column(name="vendor_id")
+    private Long vendorId;
+
+    @Column(name="status")
+    private Short status;
 
 }
