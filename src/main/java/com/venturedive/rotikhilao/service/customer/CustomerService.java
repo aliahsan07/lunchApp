@@ -2,13 +2,10 @@ package com.venturedive.rotikhilao.service.customer;
 
 import com.venturedive.rotikhilao.DTO.FoodItemDTO;
 import com.venturedive.rotikhilao.enums.OrderStatus;
-import com.venturedive.rotikhilao.model.OfficeBoy;
-import com.venturedive.rotikhilao.model.Order;
-import com.venturedive.rotikhilao.model.OrderItem;
+import com.venturedive.rotikhilao.model.*;
 import com.venturedive.rotikhilao.pojo.BooleanResponse;
 import com.venturedive.rotikhilao.pojo.ResponseList;
-import com.venturedive.rotikhilao.repository.OfficeBoyRepository;
-import com.venturedive.rotikhilao.repository.OrderRepository;
+import com.venturedive.rotikhilao.repository.*;
 import com.venturedive.rotikhilao.request.OrderWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,12 +26,28 @@ public class CustomerService implements ICustomerService {
     @Autowired
     private OfficeBoyRepository officeBoyRepository;
 
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+
+    @Autowired
+    private FoodItemRepository foodItemRepository;
+
 
     @Override
-    public ResponseList<Order> viewCurrentOrders() {
+    public ResponseList<Order> viewCurrentOrders(Long customerId) throws Exception {
 
         // fetch user Id from token and then fetch their orders
-        List<Order> orders = orderRepository.findAllByOrderedByAndOrderStatus(1L, 1);
+        Customer customer = null;
+        try{
+            customer = customerRepository.getOne(customerId);
+        } catch (Exception e){
+            throw new Exception("Invalid UserId provided");
+        }
+
+        List<Order> orders = orderRepository.findAllByOrderedByIdAndOrderStatus(customerId, OrderStatus.PREPARING.value());
 
         ResponseList<Order> responseList = new ResponseList<>();
         responseList.setData(orders);
@@ -54,32 +67,46 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class, readOnly = false, propagation = Propagation.REQUIRED)
-    public BooleanResponse orderFood(OrderWrapper request) {
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    public BooleanResponse orderFood(OrderWrapper request) throws Exception {
 
-        List<FoodItemDTO> foodList = request.getOrderList();
+        if (request.getCustomerId() == null || (!customerRepository.findById(request.getCustomerId()).isPresent())){
+            throw new Exception("Sorry! Invalid customerId provided");
+        }
+
+        Customer customer = customerRepository.getOne(request.getCustomerId());
+
+
+        List<FoodItemDTO> foodList = request.getOrderList() == null ? null : request.getOrderList();
+
+        if (foodList ==  null || foodList.isEmpty()){
+            throw new Exception("Sorry! Your cart is empty");
+        }
 
         Order order = new Order();
-        order.setOrderStatus(OrderStatus.PREPARING);
+        order.setOrderStatus(OrderStatus.PREPARING.value());
+
+        if (request.getTotalPrice() != null){
+            order.setTotalPrice(request.getTotalPrice());
+        }
+
+        order.setAssignedTo(fetchWorker());
+        order.setOrderTime(LocalDateTime.now() );
+        order.setOrderedBy(customer);
 
         for (FoodItemDTO item : foodList){
 
-            OrderItem orderItem = new OrderItem();
-            orderItem.setQuantity(item.getQuantity());
-
+            FoodItem foodItem = foodItemRepository.getOne(item.getItemId());
+            order.addFoodItem(foodItem, item.getQuantity());
         }
-        order.setTotalPrice(request.getTotalPrice());
-        order.setAssignedTo(fetchWorker());
-        order.setOrderTime(LocalDateTime.now() );
-
-
         orderRepository.save(order);
+
         return BooleanResponse.success();
     }
 
     private OfficeBoy fetchWorker(){
 
-        OfficeBoy officeBoy = officeBoyRepository.getOne(18L);
+        OfficeBoy officeBoy = officeBoyRepository.getOne(3L);
 
         return officeBoy;
     }

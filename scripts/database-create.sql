@@ -161,9 +161,9 @@ CREATE TABLE IF NOT EXISTS `lunchApp`.`orders` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lunchApp`.`order_item` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `item_id` BIGINT(20) UNSIGNED NOT NULL,
+  `item_id` BIGINT(20) UNSIGNED NULL,
   `quantity` INT(11) NOT NULL,
-  `order_id` BIGINT(20) UNSIGNED NOT NULL,
+  `order_id` BIGINT(20) UNSIGNED NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_order_idx` (`order_id` ASC),
   INDEX `fk_food_item_idx` (`item_id` ASC),

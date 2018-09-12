@@ -7,9 +7,9 @@ import com.venturedive.rotikhilao.request.OrderWrapper;
 
 public interface ICustomerService {
     
-    ResponseList<Order> viewCurrentOrders();
+    ResponseList<Order> viewCurrentOrders(Long customerId) throws Exception;
 
     ResponseList<Order> viewAllOrders();
 
-    BooleanResponse orderFood(OrderWrapper request);
+    BooleanResponse orderFood(OrderWrapper request) throws Exception;
 }

@@ -1,10 +1,17 @@
 {
   "orderList": [{
     "quantity": 1,
-    "unitPrice": 130,
-    "totalPrice": 130,
+    "unitPrice": 275,
+    "totalPrice": 275,
     "itemId": 1
-  }],
-  "totalPrice": 130,
-  "noOfItems": 1
+  }, {
+    "quantity": 2,
+    "unitPrice": 195,
+    "totalPrice": 390,
+    "itemId": 2
+  }
+  ],
+  "totalPrice": 665,
+  "noOfItems": 3,
+  "customerId" : 2
 }

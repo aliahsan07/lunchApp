@@ -28,7 +28,7 @@ public class VendorController {
     private IVendorService vendorService;
 
     @GetMapping(value = "/{vendorId}/menu")
-    public MenuResponse displayMenu(@RequestParam(value="vendorId") Long vendorId ) throws Exception {
+    public MenuResponse displayMenu(@PathVariable(value="vendorId") Long vendorId ) throws Exception {
         // should be visible for customers as well
         log.info("DISPLAY MENU REQUEST RECEIVED");
 

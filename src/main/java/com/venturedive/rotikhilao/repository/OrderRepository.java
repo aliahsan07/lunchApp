@@ -1,5 +1,7 @@
 package com.venturedive.rotikhilao.repository;
 
+import com.venturedive.rotikhilao.enums.OrderStatus;
+import com.venturedive.rotikhilao.model.Customer;
 import com.venturedive.rotikhilao.model.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,7 +18,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 //    List<Order> findAllByAssignedToAndStatusAndDeliveryTime(@Param("workerId") Long workerId, @Param("status") Integer status,
 //                                                            @Param("fromTime")LocalDateTime fromTime, @Param("toTime") LocalDateTime toTime);
 
-    List<Order> findAllByOrderedByAndOrderStatus(@Param("orderedBy") Long orderedBy, @Param("status") Integer status);
+    List<Order> findAllByOrderedByIdAndOrderStatus(@Param("orderedBy") Long orderedById, @Param("status") Short status);
 
     List<Order> findAllByOrderedBy(@Param("orderedBy") Long orderedBy);
 }

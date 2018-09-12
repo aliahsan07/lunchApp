@@ -21,29 +21,37 @@ public class CustomerController {
     private ICustomerService customerService;
 
     @Autowired
-    public CustomerController(ICustomerService customerService){
+    public CustomerController(ICustomerService customerService) {
         this.customerService = customerService;
     }
 
 
+    // TODO:
+    // 1. Add new order
+    // 2. View order
+    // 3. Update order
+    // 4. Cancel order
+    // 5. View all previous orders
 
-    @GetMapping("/orders")
-    public ResponseList<Order> viewCurrentOrders(){
 
-        ResponseList<Order> response = customerService.viewCurrentOrders();
+    @GetMapping("/orders/{customerId}/current")
+    public ResponseList<Order> viewCurrentOrders(@PathVariable(name = "customerId") Long customerId) throws Exception {
+
+        ResponseList<Order> response = customerService.viewCurrentOrders(customerId);
 
         return response;
     }
 
     @PostMapping("/orders")
-    public Boolean orderFood(@RequestBody @Valid @NotNull OrderWrapper request){
+    public BooleanResponse orderFood(@RequestBody @Valid @NotNull OrderWrapper request) throws Exception {
 
-        BooleanResponse response = customerService.orderFood(request);
-        return null;
+        log.info("ORDER FOOD REQUEST RECEIVED");
+
+        return customerService.orderFood(request);
     }
 
-    @GetMapping("/orders/all")
-    public List<Order> viewAllOrders(){
+    @GetMapping("/orders/{customerId}/all")
+    public List<Order> viewAllOrders() {
 
         ResponseList<Order> response = customerService.viewAllOrders();
         return null;
@@ -51,9 +59,6 @@ public class CustomerController {
 
 //    @GetMapping("/orders/expenses")
 //    public ResponseList<>
-
-
-
 
 
 }

@@ -3,6 +3,8 @@ package com.venturedive.rotikhilao.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(name="food_item")
 @Entity
@@ -24,5 +26,12 @@ public class FoodItem {
 
     @Column(name="status")
     private Short status;
+
+    @OneToMany(
+            mappedBy = "item",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<OrderItem> items = new ArrayList<>();
 
 }

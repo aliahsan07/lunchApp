@@ -19,4 +19,6 @@ public class OrderWrapper {
     private Integer totalPrice;
 
     private Integer noOfItems;
+
+    private Long customerId;
 }
