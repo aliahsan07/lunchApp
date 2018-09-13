@@ -9,7 +9,11 @@ public interface ICustomerService {
     
     ResponseList<Order> viewCurrentOrders(Long customerId) throws Exception;
 
-    ResponseList<Order> viewAllOrders();
+    ResponseList<Order> viewAllOrders(Long customerId) throws Exception;
 
     BooleanResponse orderFood(OrderWrapper request) throws Exception;
+
+    BooleanResponse cancelOrder(Long customerId, Long orderId) throws Exception;
+
+    BooleanResponse updateOrder(Long customerId, Long orderId, OrderWrapper request) throws Exception;
 }

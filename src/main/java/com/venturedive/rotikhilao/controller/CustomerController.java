@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @RestController
 @Slf4j
@@ -26,20 +25,17 @@ public class CustomerController {
     }
 
 
-    // TODO:
-    // 1. Add new order
-    // 2. View order
-    // 3. Update order
-    // 4. Cancel order
-    // 5. View all previous orders
-
-
     @GetMapping("/orders/{customerId}/current")
     public ResponseList<Order> viewCurrentOrders(@PathVariable(name = "customerId") Long customerId) throws Exception {
 
-        ResponseList<Order> response = customerService.viewCurrentOrders(customerId);
+        return customerService.viewCurrentOrders(customerId);
 
-        return response;
+    }
+
+    @GetMapping("/orders/{customerId}/all")
+    public ResponseList<Order> viewAllOrders(@PathVariable(name = "customerId") Long customerId) throws Exception {
+
+        return customerService.viewAllOrders(customerId);
     }
 
     @PostMapping("/orders")
@@ -50,15 +46,29 @@ public class CustomerController {
         return customerService.orderFood(request);
     }
 
-    @GetMapping("/orders/{customerId}/all")
-    public List<Order> viewAllOrders() {
 
-        ResponseList<Order> response = customerService.viewAllOrders();
-        return null;
+    @DeleteMapping("/orders/{customerId}/{orderId}")
+    public BooleanResponse cancelOrder(@PathVariable(name="customerId") Long customerId,
+                                       @PathVariable(name="orderId") Long orderId) throws Exception {
+
+        return customerService.cancelOrder(customerId, orderId);
+
     }
 
-//    @GetMapping("/orders/expenses")
-//    public ResponseList<>
+
+    @PutMapping("/orders/{customerId}/{orderId}")
+    public BooleanResponse updateOrder(@PathVariable(name="customerId") Long customerId,
+                                       @PathVariable(name="orderId") Long orderId,
+                                       @RequestBody @Valid @NotNull OrderWrapper request) throws Exception {
+
+        return customerService.updateOrder(customerId,orderId, request);
+    }
+
+
+    // TODO:
+    // 1. View menu
+    // 2. Filter menu items
+    // 3.
 
 
 }

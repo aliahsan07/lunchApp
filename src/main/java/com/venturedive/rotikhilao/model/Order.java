@@ -1,8 +1,6 @@
 package com.venturedive.rotikhilao.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.venturedive.rotikhilao.enums.OrderStatus;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -10,6 +8,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name="orders")
@@ -64,6 +63,23 @@ public class Order implements Serializable {
         OrderItem orderItem = new OrderItem(this, foodItem, quantity);
         items.add(orderItem);
         foodItem.getItems().add(orderItem);
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o){
+            return true;
+        }
+        if (o == null || o.getClass() != o.getClass()){
+            return false;
+        }
+        Order that = (Order) o;
+        return Objects.equals(orderedBy.getId(), that.getId()) && Objects.equals(orderTime, that.getOrderTime());
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(orderedBy.getId(), orderTime);
     }
 
 //    public void removeFoodItem(FoodItem foodItem){

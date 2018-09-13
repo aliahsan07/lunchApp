@@ -7,13 +7,13 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name="order_item")
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class OrderItem implements Serializable {
 
 
@@ -24,11 +24,9 @@ public class OrderItem implements Serializable {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("id")
     private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("id")
     private FoodItem item;
 
     @Column(name="quantity")
@@ -38,5 +36,24 @@ public class OrderItem implements Serializable {
         this.item = foodItem;
         this.quantity = quantity;
         this.order = order;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        OrderItem that = (OrderItem) o;
+        return Objects.equals(order, that.order) && Objects.equals(item, that.item);
+
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(order, item);
     }
 }

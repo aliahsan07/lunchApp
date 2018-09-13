@@ -18,7 +18,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 //    List<Order> findAllByAssignedToAndStatusAndDeliveryTime(@Param("workerId") Long workerId, @Param("status") Integer status,
 //                                                            @Param("fromTime")LocalDateTime fromTime, @Param("toTime") LocalDateTime toTime);
 
-    List<Order> findAllByOrderedByIdAndOrderStatus(@Param("orderedBy") Long orderedById, @Param("status") Short status);
+    List<Order> findAllByOrderedByIdAndOrderStatusOrderByOrderTimeDesc(@Param("orderedBy") Long orderedById, @Param("status") Short status);
 
-    List<Order> findAllByOrderedBy(@Param("orderedBy") Long orderedBy);
+    List<Order> findAllByOrderedByIdOrderByOrderTimeDesc(@Param("orderedBy") Long orderedBy);
 }

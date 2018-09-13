@@ -30,9 +30,6 @@ public class CustomerService implements ICustomerService {
     private CustomerRepository customerRepository;
 
     @Autowired
-    private OrderItemRepository orderItemRepository;
-
-    @Autowired
     private FoodItemRepository foodItemRepository;
 
 
@@ -40,14 +37,9 @@ public class CustomerService implements ICustomerService {
     public ResponseList<Order> viewCurrentOrders(Long customerId) throws Exception {
 
         // fetch user Id from token and then fetch their orders
-        Customer customer = null;
-        try{
-            customer = customerRepository.getOne(customerId);
-        } catch (Exception e){
-            throw new Exception("Invalid UserId provided");
-        }
+        validateCustomer(customerId);
 
-        List<Order> orders = orderRepository.findAllByOrderedByIdAndOrderStatus(customerId, OrderStatus.PREPARING.value());
+        List<Order> orders = orderRepository.findAllByOrderedByIdAndOrderStatusOrderByOrderTimeDesc(customerId, OrderStatus.PREPARING.value());
 
         ResponseList<Order> responseList = new ResponseList<>();
         responseList.setData(orders);
@@ -55,10 +47,23 @@ public class CustomerService implements ICustomerService {
         return responseList;
     }
 
-    @Override
-    public ResponseList<Order> viewAllOrders() {
+    private Customer validateCustomer(Long customerId) throws Exception {
+        Customer customer = null;
+        try{
+            customer = customerRepository.getOne(customerId);
+        } catch (Exception e){
+            throw new Exception("Invalid UserId provided");
+        }
 
-        List<Order> orders = orderRepository.findAllByOrderedBy(1L);
+        return customer;
+    }
+
+    @Override
+    public ResponseList<Order> viewAllOrders(Long customerId) throws Exception {
+
+        validateCustomer(customerId);
+
+        List<Order> orders = orderRepository.findAllByOrderedByIdOrderByOrderTimeDesc(customerId);
 
         ResponseList<Order> responseList = new ResponseList<>();
         responseList.setData(orders);
@@ -104,8 +109,55 @@ public class CustomerService implements ICustomerService {
         return BooleanResponse.success();
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    public BooleanResponse cancelOrder(Long customerId, Long orderId) throws Exception {
+
+        validateCustomer(customerId);
+
+        Order order = validateOrderFromCustomer(customerId, orderId);
+
+        orderRepository.delete(order);
+
+        return BooleanResponse.success();
+
+
+    }
+
+    private Order validateOrderFromCustomer(Long customerId, Long orderId) throws Exception {
+        if (!orderRepository.findById(orderId).isPresent()){
+            throw new Exception("Invalid orderId provided.");
+        }
+
+        Order order = orderRepository.getOne(orderId);
+        if (!order.getOrderedById().equals(customerId)){
+            throw new Exception("You're not authorized to access this order");
+        }
+        return order;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    public BooleanResponse updateOrder(Long customerId, Long orderId, OrderWrapper request) throws Exception {
+
+        Customer customer = validateCustomer(customerId);
+
+        Order order = validateOrderFromCustomer(customerId, orderId);
+
+        List<FoodItemDTO> foodList = request.getOrderList() == null ? null : request.getOrderList();
+
+        if (foodList ==  null || foodList.isEmpty()){
+            throw new Exception("Sorry! There is nothing to be updated");
+        }
+
+        return null;
+
+
+    }
+
     private OfficeBoy fetchWorker(){
 
+        // TODO: this lies under admin portal probably
         OfficeBoy officeBoy = officeBoyRepository.getOne(3L);
 
         return officeBoy;
