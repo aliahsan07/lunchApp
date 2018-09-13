@@ -19,4 +19,6 @@ public interface ICustomerService {
     BooleanResponse updateOrder(Long customerId, Long orderId, OrderWrapper request) throws Exception;
 
     MenuResponse displayMenu(Long vendorId) throws Exception;
+
+    MenuResponse filterMenuByPrice(Integer fromPrice, Integer toPrice) throws Exception;
 }

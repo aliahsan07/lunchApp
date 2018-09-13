@@ -13,5 +13,6 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
     List<FoodItem> findAllByVendorIdAndStatus(@Param("vendorId") Long vendorId, @Param("status") Short status);
 
 
+    List<FoodItem> findAllByPriceBetweenAndStatus(Integer fromPrice, Integer toPrice, Short status);
 
 }

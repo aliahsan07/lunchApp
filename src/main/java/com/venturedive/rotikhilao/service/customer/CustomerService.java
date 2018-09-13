@@ -1,7 +1,9 @@
 package com.venturedive.rotikhilao.service.customer;
 
 import com.venturedive.rotikhilao.DTO.FoodItemDTO;
+import com.venturedive.rotikhilao.enums.FoodItemStatus;
 import com.venturedive.rotikhilao.enums.OrderStatus;
+import com.venturedive.rotikhilao.mapper.MenuMapper;
 import com.venturedive.rotikhilao.model.*;
 import com.venturedive.rotikhilao.pojo.BooleanResponse;
 import com.venturedive.rotikhilao.pojo.MenuResponse;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -166,11 +169,40 @@ public class CustomerService implements ICustomerService {
         return serviceUtil.displayMenu(vendorId);
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    public MenuResponse filterMenuByPrice(Integer fromPrice, Integer toPrice) throws Exception {
+
+        validatePriceRange(fromPrice, toPrice);
+
+        List<FoodItem> foodItems = foodItemRepository.findAllByPriceBetweenAndStatus(fromPrice, toPrice, FoodItemStatus.ACTIVE.value());
+
+        MenuResponse menuResponse = new MenuResponse();
+
+        List<FoodItemDTO> wrappedFoodItems = MenuMapper.wrapFoodItems(foodItems);
+
+        menuResponse.setItems(wrappedFoodItems);
+
+        return menuResponse;
+
+    }
+
     private OfficeBoy fetchWorker(){
 
         // TODO: this lies under admin portal probably
         OfficeBoy officeBoy = officeBoyRepository.getOne(3L);
 
         return officeBoy;
+    }
+
+    private void validatePriceRange(Integer from, Integer to) throws Exception {
+
+        if (from.intValue() < 0 || to.intValue() <0){
+            throw new Exception("Invalid range provided. Try again");
+        }
+
+        if (to.intValue() < from.intValue()){
+            throw new Exception("Invalid range provided. toPrice should be >= fromPrice");
+        }
     }
 }

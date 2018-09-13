@@ -87,11 +87,14 @@ public class CustomerController {
 
 
     @GetMapping(value ="/vendors/menu")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Fetch food items by filtering on price")
     public MenuResponse filterMenuByPrice(@RequestParam(value = "fromPrice") Integer fromPrice,
-                                          @RequestParam(value="toPrice") Integer toPrice) {
+                                          @RequestParam(value="toPrice") Integer toPrice) throws Exception {
 
-        //return customerService.filterMenuByPrice(fromPrice, toPrice);
-        return null;
+        return customerService.filterMenuByPrice(fromPrice, toPrice);
+
+
     }
 
 

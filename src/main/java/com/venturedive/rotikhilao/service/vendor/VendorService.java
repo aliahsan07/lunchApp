@@ -1,9 +1,7 @@
 package com.venturedive.rotikhilao.service.vendor;
 
 import com.venturedive.rotikhilao.enums.FoodItemStatus;
-import com.venturedive.rotikhilao.exception.ApplicationException;
 import com.venturedive.rotikhilao.model.FoodItem;
-import com.venturedive.rotikhilao.model.Vendor;
 import com.venturedive.rotikhilao.pojo.BooleanResponse;
 import com.venturedive.rotikhilao.pojo.MenuResponse;
 import com.venturedive.rotikhilao.pojo.ResponseList;
@@ -14,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service

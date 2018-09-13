@@ -4,7 +4,6 @@ import com.venturedive.rotikhilao.model.FoodItem;
 import com.venturedive.rotikhilao.pojo.BooleanResponse;
 import com.venturedive.rotikhilao.pojo.MenuResponse;
 import com.venturedive.rotikhilao.pojo.ResponseList;
-import com.venturedive.rotikhilao.request.OrderWrapper;
 import com.venturedive.rotikhilao.service.vendor.IVendorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

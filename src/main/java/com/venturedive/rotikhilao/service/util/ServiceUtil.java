@@ -2,6 +2,7 @@ package com.venturedive.rotikhilao.service.util;
 
 import com.venturedive.rotikhilao.enums.FoodItemStatus;
 import com.venturedive.rotikhilao.exception.ApplicationException;
+import com.venturedive.rotikhilao.mapper.MenuMapper;
 import com.venturedive.rotikhilao.model.FoodItem;
 import com.venturedive.rotikhilao.model.Vendor;
 import com.venturedive.rotikhilao.pojo.MenuResponse;
@@ -20,6 +21,7 @@ public class ServiceUtil {
     @Autowired
     private FoodItemRepository foodItemRepository;
 
+    @Autowired
     private VendorRepository vendorRepository;
 
 
@@ -35,7 +37,7 @@ public class ServiceUtil {
 
         MenuResponse menuResponse = new MenuResponse();
 
-        menuResponse.setItems(activeMenuItems);
+        menuResponse.setItems(MenuMapper.wrapFoodItems(activeMenuItems));
         if (vendor.get().getName() != null) {
             menuResponse.setVendorName(vendor.get().getName());
         }

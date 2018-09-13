@@ -1,5 +1,6 @@
 package com.venturedive.rotikhilao.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -36,6 +37,7 @@ public class FoodItem implements Serializable {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @JsonIgnore
     private List<OrderItem> items = new ArrayList<>();
 
 
