@@ -4,9 +4,11 @@ import com.venturedive.rotikhilao.DTO.FoodItemDTO;
 import com.venturedive.rotikhilao.enums.OrderStatus;
 import com.venturedive.rotikhilao.model.*;
 import com.venturedive.rotikhilao.pojo.BooleanResponse;
+import com.venturedive.rotikhilao.pojo.MenuResponse;
 import com.venturedive.rotikhilao.pojo.ResponseList;
 import com.venturedive.rotikhilao.repository.*;
 import com.venturedive.rotikhilao.request.OrderWrapper;
+import com.venturedive.rotikhilao.service.util.ServiceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -31,6 +33,9 @@ public class CustomerService implements ICustomerService {
 
     @Autowired
     private FoodItemRepository foodItemRepository;
+
+    @Autowired
+    private ServiceUtil serviceUtil;
 
 
     @Override
@@ -153,6 +158,12 @@ public class CustomerService implements ICustomerService {
         return null;
 
 
+    }
+
+    @Override
+    public MenuResponse displayMenu(Long vendorId) throws Exception {
+
+        return serviceUtil.displayMenu(vendorId);
     }
 
     private OfficeBoy fetchWorker(){

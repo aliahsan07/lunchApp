@@ -9,6 +9,7 @@ import com.venturedive.rotikhilao.pojo.MenuResponse;
 import com.venturedive.rotikhilao.pojo.ResponseList;
 import com.venturedive.rotikhilao.repository.FoodItemRepository;
 import com.venturedive.rotikhilao.repository.VendorRepository;
+import com.venturedive.rotikhilao.service.util.ServiceUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,25 +27,13 @@ public class VendorService implements IVendorService {
     @Autowired
     private VendorRepository vendorRepository;
 
+    @Autowired
+    private ServiceUtil serviceUtil;
+
     @Override
     public MenuResponse displayMenu(Long vendorId) throws Exception {
 
-        List<FoodItem> activeMenuItems = foodItemRepository.findAllByVendorIdAndStatus(vendorId, FoodItemStatus.ACTIVE.value());
-        Optional<Vendor> vendor = vendorRepository.findById(vendorId);
-
-
-
-        if (!vendor.isPresent()){
-            throw new ApplicationException("No data present against the provided vendor ID");
-        }
-
-        MenuResponse menuResponse = new MenuResponse();
-
-        menuResponse.setItems(activeMenuItems);
-        if (vendor.get().getName() != null) {
-            menuResponse.setVendorName(vendor.get().getName());
-        }
-        return menuResponse;
+        return serviceUtil.displayMenu(vendorId);
 
     }
 
