@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Setter
 @EqualsAndHashCode()
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User implements Serializable {
+public abstract class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
