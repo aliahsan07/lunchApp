@@ -1,7 +1,6 @@
 package com.venturedive.rotikhilao.service.util;
 
 import com.venturedive.rotikhilao.enums.FoodItemStatus;
-import com.venturedive.rotikhilao.exception.ApplicationException;
 import com.venturedive.rotikhilao.mapper.MenuMapper;
 import com.venturedive.rotikhilao.model.FoodItem;
 import com.venturedive.rotikhilao.model.Vendor;
@@ -32,7 +31,7 @@ public class ServiceUtil {
 
 
         if (!vendor.isPresent()) {
-            throw new ApplicationException("No data present against the provided vendor ID");
+            throw new Exception("No data present against the provided vendor ID");
         }
 
         MenuResponse menuResponse = new MenuResponse();

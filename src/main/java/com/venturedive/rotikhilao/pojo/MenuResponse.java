@@ -3,7 +3,6 @@ package com.venturedive.rotikhilao.pojo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.venturedive.rotikhilao.DTO.FoodItemDTO;
-import com.venturedive.rotikhilao.model.FoodItem;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -2,6 +2,7 @@ package com.venturedive.rotikhilao.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -32,4 +33,14 @@ public abstract class User implements Serializable {
 
     @Column(name="last_name")
     private String lastName;
+
+    @ManyToOne
+    private Role role;
+
+    public User(String userName, String password, String firstName, String lastName) {
+        this.userName = userName;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 }

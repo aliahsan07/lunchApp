@@ -16,4 +16,8 @@ public class Customer extends User {
     @Column(name="balance")
     private Integer balance;
 
+    public Customer(String userName, String password, String firstName, String lastName){
+        super(userName, password, firstName, lastName);
+
+    }
 }

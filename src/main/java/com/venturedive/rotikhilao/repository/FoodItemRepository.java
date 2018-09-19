@@ -15,4 +15,5 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
 
     List<FoodItem> findAllByPriceBetweenAndStatus(Integer fromPrice, Integer toPrice, Short status);
 
+
 }
