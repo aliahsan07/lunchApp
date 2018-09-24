@@ -1,5 +1,7 @@
 package com.venturedive.rotikhilao.service.vendor;
 
+import com.venturedive.rotikhilao.DAO.FoodItem.FoodItemDAO;
+import com.venturedive.rotikhilao.DAO.FoodItem.IFoodItemDAO;
 import com.venturedive.rotikhilao.enums.FoodItemStatus;
 import com.venturedive.rotikhilao.model.FoodItem;
 import com.venturedive.rotikhilao.pojo.BooleanResponse;
@@ -18,11 +20,6 @@ import java.util.Optional;
 @Slf4j
 public class VendorService implements IVendorService {
 
-    @Autowired
-    private FoodItemRepository foodItemRepository;
-
-    @Autowired
-    private VendorRepository vendorRepository;
 
     @Autowired
     private ServiceUtil serviceUtil;
@@ -40,10 +37,12 @@ public class VendorService implements IVendorService {
         //1. do validation for vendor (TODO)
         //2. Iterate each item and add it to FoodItem table
 
+        IFoodItemDAO foodItemDAO = new FoodItemDAO();
+
         for (FoodItem item : items.getData()){
             item.setStatus(FoodItemStatus.ACTIVE.value());
             item.setVendorId(vendorId);
-            foodItemRepository.save(item);
+            foodItemDAO.saveFoodItem(item);
         }
 
         return displayMenu(vendorId);
@@ -66,19 +65,15 @@ public class VendorService implements IVendorService {
             savedFoodItem.setTitle(foodItem.getTitle());
         }
 
-        foodItemRepository.save(savedFoodItem);
+        new FoodItemDAO().saveFoodItem(savedFoodItem);
+
         return BooleanResponse.success();
 
     }
 
     private FoodItem validateFoodItemChangeRequest(Long vendorId, Long itemId) throws Exception {
-        Optional<FoodItem> savedFoodItemWrapper = foodItemRepository.findById(itemId);
 
-        if (!savedFoodItemWrapper.isPresent()){
-            throw new Exception("Invalid itemId provided. No food item found");
-        }
-
-        FoodItem savedFoodItem = savedFoodItemWrapper.get();
+        FoodItem savedFoodItem = new FoodItemDAO().fetchFoodItemById(itemId);
 
         if (!savedFoodItem.getVendorId().equals(vendorId)){
             throw new Exception("Sorry! You're not authorized to update foodItem with id: " + itemId);
@@ -92,7 +87,7 @@ public class VendorService implements IVendorService {
         FoodItem foodItem = validateFoodItemChangeRequest(vendorId, itemId);
 
         foodItem.setStatus(FoodItemStatus.DISCONTINUED.value());
-        foodItemRepository.save(foodItem);
+        new FoodItemDAO().saveFoodItem(foodItem);
 
         return BooleanResponse.success();
 

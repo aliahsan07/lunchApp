@@ -35,4 +35,10 @@ public class FoodItemDAO implements IFoodItemDAO {
 
         return items;
     }
+
+    @Override
+    public void saveFoodItem(FoodItem foodItem) {
+
+        foodItemRepository.save(foodItem);
+    }
 }
