@@ -2,9 +2,11 @@ package com.venturedive.rotikhilao.controller;
 
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.venturedive.rotikhilao.enums.UserType;
+import com.venturedive.rotikhilao.model.Admin;
 import com.venturedive.rotikhilao.model.Customer;
 import com.venturedive.rotikhilao.model.User;
 import com.venturedive.rotikhilao.pojo.BooleanResponse;
+import com.venturedive.rotikhilao.repository.AdminRepository;
 import com.venturedive.rotikhilao.repository.CustomerRepository;
 import com.venturedive.rotikhilao.repository.RoleRepository;
 import com.venturedive.rotikhilao.repository.UserRepository;
@@ -53,6 +55,9 @@ public class AuthController {
     @Autowired
     JwtTokenProvider tokenProvider;
 
+    @Autowired
+    AdminRepository adminRepository;
+
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -79,36 +84,59 @@ public class AuthController {
             return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
         }
 
-//        if(userRepository.existsByEmail(signUpRequest.getEmail())) {
-//            return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
-//                    HttpStatus.BAD_REQUEST);
-//        }
 
-        // Creating user's account
-//        User user = new User(signUpRequest.getName(), signUpRequest.getUsername(),
-//                signUpRequest.getEmail(), signUpRequest.getPassword());
+        UserType userType = UserType.valueOf(signUpRequest.getUserType());
+        URI location = null;
 
-//        User user = new User(signUpRequest.getName(), signUpRequest.getUsername(),
-//                signUpRequest.getPassword());
+        switch (userType){
 
-        if (UserType.valueOf(signUpRequest.getUserType()).equals(UserType.CUSTOMER)){
+            case CUSTOMER:
+            {
+                Customer customer = new Customer(signUpRequest.getUsername(), signUpRequest.getPassword(),
+                        signUpRequest.getFirstName(), signUpRequest.getLastName());
 
-            Customer customer = new Customer(signUpRequest.getUsername(), signUpRequest.getPassword(),
-                    signUpRequest.getFirstName(), signUpRequest.getLastName());
+                customer.setPassword(passwordEncoder.encode(customer.getPassword()));
 
-            customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+                Customer result = customerRepository.save(customer);
 
-            Customer result = customerRepository.save(customer);
+                location = ServletUriComponentsBuilder
+                        .fromCurrentContextPath().path("/api/users/{username}")
+                        .buildAndExpand(result.getUserName()).toUri();
 
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentContextPath().path("/api/users/{username}")
-                    .buildAndExpand(result.getUserName()).toUri();
+                break;
+            }
 
-            return ResponseEntity.created(location).body(BooleanResponse.success("User registered succesfully"));
+            case ADMIN:
+            {
+                Admin admin = new Admin(signUpRequest.getUsername(), signUpRequest.getPassword(),
+                        signUpRequest.getFirstName(), signUpRequest.getLastName());
+
+                admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+
+                Admin result = adminRepository.save(admin);
+                location = ServletUriComponentsBuilder
+                        .fromCurrentContextPath().path("/api/users/{username}")
+                        .buildAndExpand(result.getUserName()).toUri();
+                break;
+            }
+
+            case OFFICE_BOY:
+            {
+                // TODO: assumption -> will be created by admin so this end point doesn't make sense
+                break;
+            }
+
+            default:
+            {
+                BooleanResponse resp = BooleanResponse.failure("Invalid user type provided!");
+                return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+            }
+
+
         }
 
+        return ResponseEntity.created(location).body(BooleanResponse.success("User registered succesfully"));
 
-        return null;
     }
 
 }

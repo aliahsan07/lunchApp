@@ -10,9 +10,13 @@ import javax.persistence.Table;
 @Table(name = "admin")
 @Getter
 @Setter
-@AllArgsConstructor
 @PrimaryKeyJoinColumn(name = "user_id")
 public class Admin extends User {
+
+    public Admin(String userName, String password, String firstName, String lastName){
+        super(userName, password, firstName, lastName);
+
+    }
 
 
 }

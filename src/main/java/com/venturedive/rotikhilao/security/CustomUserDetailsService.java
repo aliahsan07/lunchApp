@@ -23,8 +23,8 @@ public class CustomUserDetailsService implements UserDetailsService {
             throws UsernameNotFoundException {
         // Let people login with either username or email
         User user = userRepository.findByUserName(username).orElseThrow(() ->
-                        new UsernameNotFoundException("User not found with username or email : " + username)
-                );
+                new UsernameNotFoundException("User not found with username or email : " + username)
+        );
 
         return UserPrincipal.create(user);
     }

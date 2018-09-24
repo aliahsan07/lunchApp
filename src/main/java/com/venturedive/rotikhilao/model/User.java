@@ -34,7 +34,7 @@ public abstract class User implements Serializable {
     @Column(name="last_name")
     private String lastName;
 
-    @ManyToOne
+    @Transient
     private Role role;
 
     public User(String userName, String password, String firstName, String lastName) {
@@ -42,5 +42,9 @@ public abstract class User implements Serializable {
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public User(){
+
     }
 }

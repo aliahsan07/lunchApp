@@ -23,7 +23,6 @@ public class SignUpRequest {
     @Size(min = 6, max = 20)
     private String password;
 
-
     private String userType;
 
     public String getUserType() {
