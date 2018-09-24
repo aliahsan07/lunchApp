@@ -21,4 +21,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findAllByOrderedByIdAndOrderStatusOrderByOrderTimeDesc(@Param("orderedBy") Long orderedById, @Param("status") Short status);
 
     List<Order> findAllByOrderedByIdOrderByOrderTimeDesc(@Param("orderedBy") Long orderedBy);
+
+
 }
