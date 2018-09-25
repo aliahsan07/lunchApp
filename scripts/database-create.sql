@@ -23,6 +23,9 @@ CREATE TABLE IF NOT EXISTS `lunchApp`.`user` (
   `password` VARCHAR(255) NOT NULL,
   `first_name` VARCHAR(255) NULL,
   `last_name` VARCHAR(255) NULL,
+  `updated_at` DATETIME NULL,
+  `created_at` DATETIME NULL,
+  `user_type` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`))
   ENGINE = InnoDB;
 

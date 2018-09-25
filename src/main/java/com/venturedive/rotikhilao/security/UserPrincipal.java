@@ -7,6 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -24,38 +25,33 @@ public class UserPrincipal implements UserDetails {
     @JsonIgnore
     private String password;
 
-    //private Collection<? extends GrantedAuthority> authorities;
-
-    private GrantedAuthority authority;
-
-//    public UserPrincipal(Long id, String name, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
-//        this.id = id;
-//        this.name = name;
-//        this.username = username;
-//        this.email = email;
-//        this.password = password;
-//        this.authorities = authorities;
-//    }
+    private Collection<? extends GrantedAuthority> authorities;
 
 
-    public UserPrincipal(Long id, String username, String password, GrantedAuthority authority,
+
+    public UserPrincipal(Long id, String username, String password, Collection<? extends GrantedAuthority> authorities,
                          String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
-        this.authority = authority;
+        this.authorities = authorities;
     }
 
     public static UserPrincipal create(User user) {
 
-        GrantedAuthority authority =  new SimpleGrantedAuthority(user.getRole().getName().name());
+//        List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
+//                new SimpleGrantedAuthority(role.getName().name())
+//        ).collect(Collectors.toList());
+
+        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()));
+
         return new UserPrincipal(
                 user.getId(),
                 user.getUserName(),
                 user.getPassword(),
-                authority,
+                authorities,
                 user.getFirstName(),
                 user.getLastName()
         );
@@ -73,18 +69,9 @@ public class UserPrincipal implements UserDetails {
         return lastName;
     }
 
-    public GrantedAuthority getAuthority() {
-        return authority;
-    }
-
     @Override
     public String getUsername() {
         return username;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
     }
 
     @Override
@@ -92,10 +79,10 @@ public class UserPrincipal implements UserDetails {
         return password;
     }
 
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return authorities;
-//    }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
 
     @Override
     public boolean isAccountNonExpired() {

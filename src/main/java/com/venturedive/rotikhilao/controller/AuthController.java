@@ -64,7 +64,7 @@ public class AuthController {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsernameOrEmail(),
+                        loginRequest.getUsername(),
                         loginRequest.getPassword()
                 )
         );
@@ -96,6 +96,7 @@ public class AuthController {
                         signUpRequest.getFirstName(), signUpRequest.getLastName());
 
                 customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+                customer.setRole(UserType.CUSTOMER);
 
                 Customer result = customerRepository.save(customer);
 
