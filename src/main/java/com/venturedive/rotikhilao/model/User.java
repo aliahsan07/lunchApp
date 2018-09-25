@@ -1,5 +1,7 @@
 package com.venturedive.rotikhilao.model;
 
+import com.venturedive.rotikhilao.enums.UserType;
+import com.venturedive.rotikhilao.model.audit.DateAudit;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +15,7 @@ import java.io.Serializable;
 @Setter
 @EqualsAndHashCode()
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class User implements Serializable {
+public abstract class User extends DateAudit {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,4 +34,20 @@ public abstract class User implements Serializable {
 
     @Column(name="last_name")
     private String lastName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_type")
+    private UserType role;
+
+
+    public User(String userName, String password, String firstName, String lastName) {
+        this.userName = userName;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public User(){
+
+    }
 }
