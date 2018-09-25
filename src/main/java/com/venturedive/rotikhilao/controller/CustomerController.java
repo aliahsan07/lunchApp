@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 
 @RestController
 @Slf4j
-@RequestMapping("/api/customers")
+@RequestMapping("v1/api/customers")
 public class CustomerController {
 
     private ICustomerService customerService;
@@ -32,7 +32,7 @@ public class CustomerController {
 
     @GetMapping("/orders/{customerId}/current")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Get patient's current orders")
+    @ApiOperation(value = "Get customer's current orders")
     public ResponseList<Order> viewCurrentOrders(@PathVariable(name = "customerId") Long customerId) throws Exception {
 
         return customerService.viewCurrentOrders(customerId);
@@ -96,6 +96,8 @@ public class CustomerController {
 
 
     }
+
+
 
 
 }

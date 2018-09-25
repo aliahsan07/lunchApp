@@ -113,6 +113,7 @@ public class AuthController {
                         signUpRequest.getFirstName(), signUpRequest.getLastName());
 
                 admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+                admin.setRole(UserType.ADMIN);
 
                 Admin result = adminRepository.save(admin);
                 location = ServletUriComponentsBuilder
