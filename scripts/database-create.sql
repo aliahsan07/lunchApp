@@ -20,12 +20,11 @@ USE `lunchApp` ;
 CREATE TABLE IF NOT EXISTS `lunchApp`.`user` (
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_name` VARCHAR(255) NOT NULL,
-  `password` VARCHAR(255) NOT NULL,
-  `first_name` VARCHAR(255) NULL,
-  `last_name` VARCHAR(255) NULL,
+  `name` VARCHAR(255) NULL,
+  'image_url' VARCHAR(555) NULL,
   `updated_at` DATETIME NULL,
   `created_at` DATETIME NULL,
-  `user_type` VARCHAR(45) NOT NULL,
+  `user_type` VARCHAR(45)NOT NULL,
   PRIMARY KEY (`id`))
   ENGINE = InnoDB;
 
@@ -180,6 +179,15 @@ CREATE TABLE IF NOT EXISTS `lunchApp`.`order_item` (
   REFERENCES `lunchApp`.`food_item` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
+  ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `lunchApp`.`google_credentials` (
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `sub` VARCHAR(500) NOT NULL,
+  `email` VARCHAR(200) NULL,
+  `email_verified` BIT(1) NULL,
+  `exp` BIGINT NULL,
+  PRIMARY KEY (`id`))
   ENGINE = InnoDB;
 
 

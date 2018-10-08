@@ -4,9 +4,11 @@ import com.venturedive.rotikhilao.enums.OrderStatus;
 import com.venturedive.rotikhilao.model.Order;
 import com.venturedive.rotikhilao.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class OrderDAO implements IOrderDAO {
 
     @Autowired

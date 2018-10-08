@@ -21,4 +21,6 @@ public interface ICustomerService {
     MenuResponse displayMenu(Long vendorId) throws Exception;
 
     MenuResponse filterMenuByPrice(Integer fromPrice, Integer toPrice) throws Exception;
+
+    MenuResponse showMenu();
 }

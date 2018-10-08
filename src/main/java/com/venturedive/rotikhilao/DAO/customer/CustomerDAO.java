@@ -3,7 +3,10 @@ package com.venturedive.rotikhilao.DAO.customer;
 import com.venturedive.rotikhilao.model.Customer;
 import com.venturedive.rotikhilao.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+@Component
 public class CustomerDAO implements ICustomerDAO {
 
     @Autowired

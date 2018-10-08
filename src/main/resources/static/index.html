@@ -1,0 +1,54 @@
+<html lang="en">
+  <head>
+
+
+    <meta name="google-signin-client_id" content="273103486448-o9e5ur8qtagi8d34olftmrqcfniu3mvm.apps.googleusercontent.com">
+    
+  </head>
+    
+    <style>
+        
+        h2{
+            position: absolute;
+            top:0;
+            left:500;
+        }
+        
+        div.abcRadioButtonContentWrapper {
+            position: absolute
+                top: 100;
+                left:500;
+        }
+
+    
+    </style>
+  <body>
+<!--
+    <div class="g-signin2" data-theme="dark" data-accesstype="offline" data-redirecturi="http://localhost:8080/login"></div>
+      
+-->
+      
+<!--      Sign in with<a href="localhost:8080/login" target="_self"> Google</a>-->
+      <div>
+      <h2>Lunchbox for Vendians</h2>
+      <div id="my-signin2" data-theme="dark" data-accesstype="offline" ></div>
+      </div>  
+      
+      <script>
+          function renderButton() {
+            gapi.signin2.render('my-signin2', {
+            'width': 240,
+            'height': 50,
+            'longtitle': true,
+            'theme': 'dark',
+            'ux_mode': 'redirect',
+            'redirect_uri': 'http://localhost:8080/login'
+      });
+    }
+          
+      </script>
+      
+      <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+      
+  </body>
+</html>

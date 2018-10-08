@@ -8,6 +8,7 @@ import com.venturedive.rotikhilao.DAO.officeBoy.OfficeBoyDAO;
 import com.venturedive.rotikhilao.DAO.order.IOrderDAO;
 import com.venturedive.rotikhilao.DAO.order.OrderDAO;
 import com.venturedive.rotikhilao.DTO.FoodItemDTO;
+import com.venturedive.rotikhilao.configuration.JwtTokenProvider;
 import com.venturedive.rotikhilao.enums.OrderStatus;
 import com.venturedive.rotikhilao.mapper.MenuMapper;
 import com.venturedive.rotikhilao.model.Customer;
@@ -17,6 +18,7 @@ import com.venturedive.rotikhilao.model.Order;
 import com.venturedive.rotikhilao.pojo.BooleanResponse;
 import com.venturedive.rotikhilao.pojo.MenuResponse;
 import com.venturedive.rotikhilao.pojo.ResponseList;
+import com.venturedive.rotikhilao.repository.CustomerRepository;
 import com.venturedive.rotikhilao.request.OrderWrapper;
 import com.venturedive.rotikhilao.service.util.ServiceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +36,23 @@ public class CustomerService implements ICustomerService {
     @Autowired
     private ServiceUtil serviceUtil;
 
+    @Autowired
+    private ICustomerDAO customerDAO;
+
+    @Autowired
+    private IFoodItemDAO foodItemDAO;
+
+    @Autowired
+    private IOrderDAO orderDAO;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     @Override
     public ResponseList<Order> viewCurrentOrders(Long customerId) throws Exception {
 
         // fetch user Id from token and then fetch their orders
-        new CustomerDAO().fetchCustomerById(customerId);
+        customerDAO.fetchCustomerById(customerId);
 
         List<Order> orders = new OrderDAO().fetchCurrentOrders(customerId);
 
@@ -53,7 +66,7 @@ public class CustomerService implements ICustomerService {
     @Override
     public ResponseList<Order> viewAllOrders(Long customerId) throws Exception {
 
-        new CustomerDAO().fetchCustomerById(customerId);
+        customerDAO.fetchCustomerById(customerId);
 
         List<Order> orders = new OrderDAO().fetchAllUserOrders(customerId);
 
@@ -67,14 +80,14 @@ public class CustomerService implements ICustomerService {
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public BooleanResponse orderFood(OrderWrapper request) throws Exception {
 
-        ICustomerDAO customerDAO = new CustomerDAO();
+        Long userId = extractUser(request.getToken());
 
-        if (request.getCustomerId() == null || (!customerDAO.existsById(request.getCustomerId()))){
+        if (userId == null || (!customerDAO.existsById(userId))){
             throw new Exception("Sorry! Invalid customerId provided");
         }
 
-        Customer customer = new CustomerDAO().fetchCustomerById(request.getCustomerId());
 
+        Customer customer = customerDAO.fetchCustomerById(userId);
 
         List<FoodItemDTO> foodList = request.getOrderList() == null ? null : request.getOrderList();
 
@@ -83,17 +96,15 @@ public class CustomerService implements ICustomerService {
         }
 
         Order order = new Order();
-        IFoodItemDAO foodItemDAO = new FoodItemDAO();
-        IOrderDAO orderDAO = new OrderDAO();
         order.setOrderStatus(OrderStatus.PREPARING.value());
 
         if (request.getTotalPrice() != null){
             order.setTotalPrice(request.getTotalPrice());
         }
 
-        order.setAssignedTo(fetchWorker());
+//        order.setAssignedTo(fetchWorker());
         order.setOrderTime(LocalDateTime.now() );
-        order.setOrderedBy(customer);
+        order.setOrderedById(customer.getId());
 
         for (FoodItemDTO item : foodList){
 
@@ -172,6 +183,20 @@ public class CustomerService implements ICustomerService {
 
     }
 
+    @Override
+    public MenuResponse showMenu() {
+
+        List<FoodItem> foodItems =  foodItemDAO.showMenu();
+
+        MenuResponse menuResponse = new MenuResponse();
+
+        List<FoodItemDTO> wrappedFoodItems = MenuMapper.wrapFoodItems(foodItems);
+
+        menuResponse.setItems(wrappedFoodItems);
+
+        return menuResponse;
+    }
+
     private OfficeBoy fetchWorker() throws Exception {
 
         // TODO: this lies under admin portal probably
@@ -189,5 +214,12 @@ public class CustomerService implements ICustomerService {
         if (to.intValue() < from.intValue()){
             throw new Exception("Invalid range provided. toPrice should be >= fromPrice");
         }
+    }
+
+    private Long extractUser(String token){
+
+        jwtTokenProvider.validateToken(token);
+
+        return jwtTokenProvider.getUserIdFromJWT(token);
     }
 }
