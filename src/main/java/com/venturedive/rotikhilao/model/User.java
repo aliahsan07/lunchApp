@@ -26,25 +26,20 @@ public abstract class User extends DateAudit {
     @Column(name="user_name")
     private String userName;
 
-    @Column(name="password")
-    private String password;
-
-    @Column(name="first_name")
-    private String firstName;
-
-    @Column(name="last_name")
-    private String lastName;
+    @Column(name="name")
+    private String name;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "user_type")
     private UserType role;
 
+    @Column(name="image_url")
+    private String imageUrl;
 
-    public User(String userName, String password, String firstName, String lastName) {
+    public User(String userName, String imageUrl, String firstName) {
         this.userName = userName;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.imageUrl = imageUrl;
+        this.name = firstName;
     }
 
     public User(){

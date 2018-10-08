@@ -27,6 +27,7 @@ public class VendorController {
     private IVendorService vendorService;
 
     @GetMapping(value = "/{vendorId}/menu")
+    @CrossOrigin(origins = "http://localhost:3000")
     public MenuResponse displayMenu(@PathVariable(value="vendorId") Long vendorId ) throws Exception {
         // should be visible for customers as well
         log.info("DISPLAY MENU REQUEST RECEIVED");

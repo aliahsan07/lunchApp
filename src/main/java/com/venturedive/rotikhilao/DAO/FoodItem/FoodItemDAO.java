@@ -4,9 +4,11 @@ import com.venturedive.rotikhilao.enums.FoodItemStatus;
 import com.venturedive.rotikhilao.model.FoodItem;
 import com.venturedive.rotikhilao.repository.FoodItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class FoodItemDAO implements IFoodItemDAO {
 
 
@@ -40,5 +42,15 @@ public class FoodItemDAO implements IFoodItemDAO {
     public void saveFoodItem(FoodItem foodItem) {
 
         foodItemRepository.save(foodItem);
+    }
+
+    @Override
+    public List<FoodItem> showMenu() {
+
+        Short status = FoodItemStatus.ACTIVE.value();
+        List<FoodItem> items = foodItemRepository.findAllByStatus(status);
+
+        return items;
+
     }
 }

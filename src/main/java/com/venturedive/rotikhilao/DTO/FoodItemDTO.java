@@ -1,6 +1,5 @@
 package com.venturedive.rotikhilao.DTO;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,6 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FoodItemDTO {
+
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer quantity;

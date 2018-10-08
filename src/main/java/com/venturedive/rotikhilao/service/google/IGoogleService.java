@@ -1,9 +1,16 @@
 package com.venturedive.rotikhilao.service.google;
 
-import java.io.IOException;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+
 import java.util.Map;
 
 public interface IGoogleService {
 
-    Boolean checkMembership(Map<String, String> authInfo,  String accessToken) throws IOException;
+    String saveNewUser(GoogleIdToken.Payload payload);
+
+    Boolean checkUserExistence(GoogleIdToken.Payload payload);
+
+    String saveNewUser(Map<String,Object> map);
+
+    String checkUserExistence(Map<String,Object> map);
 }

@@ -11,4 +11,6 @@ public interface IFoodItemDAO {
     public abstract List<FoodItem> findAllItemsInPriceRange(Integer fromPrice, Integer toPrice);
 
     public abstract void saveFoodItem(FoodItem foodItem);
+
+    List<FoodItem> showMenu();
 }

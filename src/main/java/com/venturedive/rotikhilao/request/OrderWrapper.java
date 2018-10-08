@@ -21,4 +21,6 @@ public class OrderWrapper {
     private Integer noOfItems;
 
     private Long customerId;
+
+    private String token;
 }

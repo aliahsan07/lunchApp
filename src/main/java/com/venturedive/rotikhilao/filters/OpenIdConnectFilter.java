@@ -32,8 +32,10 @@ import com.auth0.jwk.Jwk;
 import com.auth0.jwk.JwkProvider;
 import com.auth0.jwk.UrlJwkProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Component;
 
 public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter {
+
     @Value("${security.oauth2.client.registration.google.client-id}")
     private String clientId;
 
@@ -69,7 +71,7 @@ public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter 
             final Jwt tokenDecoded = JwtHelper.decodeAndVerify(idToken, verifier(kid));
             final Map<String, String> authInfo = new ObjectMapper().readValue(tokenDecoded.getClaims(), Map.class);
             verifyClaims(authInfo);
-            googleService.checkMembership(authInfo, accessToken.getValue());
+            //googleService.checkMembership(authInfo, accessToken.getValue());
            final OpenIdConnectUserDetails user = new OpenIdConnectUserDetails(authInfo, accessToken);
             return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         } catch (final Exception e) {

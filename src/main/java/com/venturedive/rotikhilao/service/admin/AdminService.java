@@ -56,10 +56,10 @@ public class AdminService implements IAdminService {
 
         Admin admin = adminRepository.getOne(1L);
 
-        officeBoy.setFirstName(request.getFirstName());
-        officeBoy.setLastName(request.getLastName());
+//        officeBoy.setFirstName(request.getFirstName());
+//        officeBoy.setLastName(request.getLastName());
         officeBoy.setUserName(request.getUserName());
-        officeBoy.setPassword(request.getPassword());
+        //officeBoy.setPassword(request.getPassword());
         officeBoy.setCreatedBy(admin.getId());
 
         officeBoyRepository.save(officeBoy);
