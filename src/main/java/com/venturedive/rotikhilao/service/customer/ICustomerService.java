@@ -4,6 +4,7 @@ import com.venturedive.rotikhilao.model.Order;
 import com.venturedive.rotikhilao.pojo.BooleanResponse;
 import com.venturedive.rotikhilao.pojo.MenuResponse;
 import com.venturedive.rotikhilao.pojo.ResponseList;
+import com.venturedive.rotikhilao.pojo.UserProfile;
 import com.venturedive.rotikhilao.request.OrderWrapper;
 
 public interface ICustomerService {
@@ -23,4 +24,6 @@ public interface ICustomerService {
     MenuResponse filterMenuByPrice(Integer fromPrice, Integer toPrice) throws Exception;
 
     MenuResponse showMenu();
+
+    UserProfile viewProfile(Long userId) throws Exception;
 }

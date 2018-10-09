@@ -7,16 +7,50 @@ class Order extends React.Component{
     quantity = React.createRef();
     totalPriceRef = React.createRef();
 
+
+
+    // state = {
+    //     order: {}
+    // }
+
+
+    // componentDidUpdate(prevProps) {
+
+    //     if (this.props.order !== prevProps.order){
+    //         this.setState({order: this.props.order})
+    //     }
+
+
+    // }
+
+    
+
+    // handleClick = key => {
+        
+    //     const order = {...this.state.order};
+    //     order[key] = order[key] -  1;
+    //     this.setState({order});
+        
+
+    // }
+
+
     renderOrder = key => {
+
         const item = this.props.items[key];
         const count = this.props.order[key];
         const id = this.props.items[key]['itemId'];
 
+        if (count <= 0){
+            return;
+        }
+
 
         return <li key={key} > 
-            {count}  {item.title}
+            {count}x  {item.title}
             ---------------------------------
             {count * item.unitPrice} Rs
+            {/* <button className="decrease-count" onClick={() => this.handleClick(key)}>-</button> */}
         </li>
     }
 
@@ -37,9 +71,9 @@ class Order extends React.Component{
         orderData['token'] = this.props.token;
         //orderData['totalPrice'] = this.totalPriceRef.current.value;
 
-        console.log(this.props.token);
+        //console.log(this.props.token);
 
-        submitOrder(orderData).then(response => console.log(response));
+        //submitOrder(orderData).then(response => console.log(response));
 
 
     }
@@ -47,6 +81,7 @@ class Order extends React.Component{
     render(){
         
         const orderIds = Object.keys(this.props.order);
+
         const total = orderIds.reduce( (prevTotal, key) => {
             const item = this.props.items[key];
             const count = this.props.order[key];

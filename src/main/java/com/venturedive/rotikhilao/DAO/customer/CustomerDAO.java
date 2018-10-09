@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Component
 public class CustomerDAO implements ICustomerDAO {
 
@@ -16,14 +18,11 @@ public class CustomerDAO implements ICustomerDAO {
     @Override
     public Customer fetchCustomerById(Long id) throws Exception {
 
-        Customer customer = null;
-        try{
-            customer = customerRepository.getOne(id);
-        } catch (Exception e){
-            throw new Exception("Invalid UserId provided");
+        Optional<Customer> customerExists = customerRepository.findById(id);
+        if (customerExists.isPresent()){
+            return customerExists.get();
         }
-
-        return customer;
+        throw new Exception("Invalid UserId provided");
 
     }
 
