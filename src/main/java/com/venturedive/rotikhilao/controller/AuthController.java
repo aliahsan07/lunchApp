@@ -27,9 +27,7 @@ public class AuthController {
     TokenResponse authenticateUser(@RequestBody String body) throws Exception {
 
         log.info(body);
-        String token =  googleTokenVerifier.verifyIdToken(body);
-
-        return new TokenResponse(token);
+        return googleTokenVerifier.verifyIdToken(body);
 
     }
 

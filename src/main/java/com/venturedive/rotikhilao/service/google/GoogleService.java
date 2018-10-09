@@ -70,7 +70,15 @@ public class GoogleService implements IGoogleService {
     }
 
     @Override
-    public String checkUserExistence(Map<String, Object> map) {
+    public String checkUserExistence(Map<String, Object> map) throws Exception {
+
+        String domainName = (String) map.get("hd");
+
+        if (domainName == null || !domainName.equals("venturedive.com")){
+            System.out.println("Please use venturedive email address to login");
+            return "UNAUTHORIZED";
+
+        }
 
         Optional<Customer> customerW = customerRepository.findByUserName((String) map.get("email"));
 

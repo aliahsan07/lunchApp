@@ -5,10 +5,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.venturedive.rotikhilao.pojo.TokenResponse;
 import com.venturedive.rotikhilao.service.google.GoogleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -76,7 +75,7 @@ public class GoogleTokenVerifier {
             //.setAudience(Arrays.asList(CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3))
             .build();
 
-    public String verifyIdToken(String idTokenString) throws Exception {
+    public TokenResponse verifyIdToken(String idTokenString) throws Exception {
 
         GoogleIdToken idToken = verifier.verify(idTokenString);
         StringBuffer dataFromGoogleAPI = GetData(idTokenString);
@@ -93,7 +92,7 @@ public class GoogleTokenVerifier {
 
             String userToken = googleService.checkUserExistence(map);
 
-            return userToken;
+            return generateToken(userToken);
 
         } catch (JsonGenerationException e) {
             e.printStackTrace();
@@ -105,8 +104,18 @@ public class GoogleTokenVerifier {
             throw new Exception("Error in generating token");
         }
 
-        return "";
+        return generateToken("UNAUTHORIZED");
 
+    }
+
+
+    private TokenResponse generateToken(String content){
+
+        if (content.equals("UNAUTHORIZED")){
+            return new TokenResponse("false", "-");
+        }
+
+        return new TokenResponse("true", content);
     }
 
 

@@ -16,7 +16,7 @@ class Welcome extends Component {
 
 
     componentDidUpdate(){
-        console.log("UPDATED")
+
         localStorage.setItem("token", this.state.token );
         this.props.history.push('');
     }
@@ -26,23 +26,23 @@ class Welcome extends Component {
     };
 
 
-    facebookResponse = (response) => {
-        const tokenBlob = new Blob([JSON.stringify({access_token: response.accessToken}, null, 2)], {type : 'application/json'});
-        const options = {
-            method: 'POST',
-            body: tokenBlob,
-            mode: 'cors',
-            cache: 'default'
-        };
-        fetch('http://localhost:4000/api/v1/auth/facebook', options).then(r => {
-            const token = r.headers.get('x-auth-token');
-            r.json().then(user => {
-                if (token) {
-                    this.setState({isAuthenticated: true, user, token})
-                }
-            });
-        })
-    };
+    // facebookResponse = (response) => {
+    //     const tokenBlob = new Blob([JSON.stringify({access_token: response.accessToken}, null, 2)], {type : 'application/json'});
+    //     const options = {
+    //         method: 'POST',
+    //         body: tokenBlob,
+    //         mode: 'cors',
+    //         cache: 'default'
+    //     };
+    //     fetch('http://localhost:4000/api/v1/auth/facebook', options).then(r => {
+    //         const token = r.headers.get('x-auth-token');
+    //         r.json().then(user => {
+    //             if (token) {
+    //                 this.setState({isAuthenticated: true, user, token})
+    //             }
+    //         });
+    //     })
+    // };
 
 
     googleResponse = (response) => {
@@ -59,21 +59,23 @@ class Welcome extends Component {
         };
         
     
-        fetch('http://http://192.168.106.251:8080/api/login', options).then(r => {
+        fetch('http://localhost:8080/api/login', options).then(r => {
 
             r.json().then(user => {
-                if (user.jwtToken) {
+                if (user.isAuthorized === "true") {
                     this.setState({isAuthenticated: true, user, token: user.jwtToken})
                     console.log(this.state);
+                }else {
+                    alert("Please use venturedive email address to login");
                 }
             });
             
-            // r.json().then(user => {
-            //     if (token) {
-            //         this.setState({isAuthenticated: true, user, token})
-            //         console.log(this.state);
-            //     }
-            // });
+        //     // r.json().then(user => {
+        //     //     if (token) {
+        //     //         this.setState({isAuthenticated: true, user, token})
+        //     //         console.log(this.state);
+        //     //     }
+        //     // });
         })
     };
 

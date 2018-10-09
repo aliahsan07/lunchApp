@@ -12,5 +12,5 @@ public interface IGoogleService {
 
     String saveNewUser(Map<String,Object> map);
 
-    String checkUserExistence(Map<String,Object> map);
+    String checkUserExistence(Map<String,Object> map) throws Exception;
 }

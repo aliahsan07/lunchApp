@@ -16,5 +16,7 @@ public class TokenResponse implements Serializable {
 
     private static final long serialVersionUID = -1007099974760213488L;
 
+    private String isAuthorized;
+
     private String jwtToken;
 }
