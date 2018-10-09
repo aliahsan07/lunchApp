@@ -4,6 +4,7 @@ import com.venturedive.rotikhilao.model.Order;
 import com.venturedive.rotikhilao.pojo.BooleanResponse;
 import com.venturedive.rotikhilao.pojo.MenuResponse;
 import com.venturedive.rotikhilao.pojo.ResponseList;
+import com.venturedive.rotikhilao.pojo.UserProfile;
 import com.venturedive.rotikhilao.request.OrderWrapper;
 import com.venturedive.rotikhilao.service.customer.ICustomerService;
 import io.swagger.annotations.ApiOperation;
@@ -30,9 +31,19 @@ public class CustomerController {
     }
 
 
+    @GetMapping("/profile/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get user profile")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public UserProfile viewProfile(@PathVariable(name= "userId") Long userId) throws Exception {
+
+        return customerService.viewProfile(userId);
+    }
+
+
     @GetMapping("/orders/{customerId}/current")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Get patient's current orders")
+    @ApiOperation(value = "Get customer's current orders")
     public ResponseList<Order> viewCurrentOrders(@PathVariable(name = "customerId") Long customerId) throws Exception {
 
         return customerService.viewCurrentOrders(customerId);

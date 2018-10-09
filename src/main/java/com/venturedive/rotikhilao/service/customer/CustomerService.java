@@ -18,6 +18,7 @@ import com.venturedive.rotikhilao.model.Order;
 import com.venturedive.rotikhilao.pojo.BooleanResponse;
 import com.venturedive.rotikhilao.pojo.MenuResponse;
 import com.venturedive.rotikhilao.pojo.ResponseList;
+import com.venturedive.rotikhilao.pojo.UserProfile;
 import com.venturedive.rotikhilao.repository.CustomerRepository;
 import com.venturedive.rotikhilao.request.OrderWrapper;
 import com.venturedive.rotikhilao.service.util.ServiceUtil;
@@ -195,6 +196,19 @@ public class CustomerService implements ICustomerService {
         menuResponse.setItems(wrappedFoodItems);
 
         return menuResponse;
+    }
+
+    @Override
+    public UserProfile viewProfile(Long userId) throws Exception {
+
+        Customer customer = customerDAO.fetchCustomerById(userId);
+
+        UserProfile userProfile = new UserProfile();
+        userProfile.setImageUrl(customer.getImageUrl());
+        userProfile.setName(customer.getName());
+        userProfile.setUserName(customer.getUserName());
+
+        return userProfile;
     }
 
     private OfficeBoy fetchWorker() throws Exception {

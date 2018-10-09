@@ -33,4 +33,15 @@ public class AuthController {
 
     }
 
+
+    @PostMapping(value="/fb-login")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public @ResponseBody TokenResponse authenticateFBUser(@RequestBody String body) throws Exception {
+
+        log.info(body);
+
+        return null;
+
+    }
+
 }

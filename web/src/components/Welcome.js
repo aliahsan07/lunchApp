@@ -2,6 +2,8 @@ import React, { Component } from "react"
 import FacebookLogin from 'react-facebook-login';
 import { GoogleLogin } from 'react-google-login';
 import config from '../config.json';
+import Vendians from '../css/images/Vendians.png';
+import "../css/style.css"
 
 
 class Welcome extends Component {
@@ -57,7 +59,7 @@ class Welcome extends Component {
         };
         
     
-        fetch('http://localhost:8080/api/login', options).then(r => {
+        fetch('http://http://192.168.106.251:8080/api/login', options).then(r => {
 
             r.json().then(user => {
                 if (user.jwtToken) {
@@ -77,7 +79,7 @@ class Welcome extends Component {
 
 
     onFailure = (error) => {
-      alert(error);
+      alert("Couldn't authenticate.");
     }
 
    
@@ -97,14 +99,14 @@ class Welcome extends Component {
                 </div>
             ) :
             (
-                <div>
-                    <FacebookLogin
+                <div className="googleButton">
+                    {/* <FacebookLogin
                         appId={config.FACEBOOK_APP_ID}
                         autoLoad={false}
                         fields="name,email,picture"
                         callback={this.facebookResponse} 
-                        />
-                    <GoogleLogin
+                        /> */}
+                    <GoogleLogin 
                         clientId={config.GOOGLE_CLIENT_ID}
                         buttonText="Login with Google"
                         onSuccess={this.googleResponse}
@@ -115,7 +117,8 @@ class Welcome extends Component {
 
         return (
             <div className="Welcome">
-                <header>Welcome to Roti Khilao! (UI to be updated later) </header>
+                <img src={Vendians} className="vendImage" />
+                <header className="head"><strong> Roti Khilao (For Vendians)</strong></header>
                 {content}
             </div>
         );

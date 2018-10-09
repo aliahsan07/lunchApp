@@ -2,6 +2,8 @@ import React from 'react';
 import Header from './Header';
 import FoodItem from './FoodItem';
 import Order from './Order'
+import NavBar from './NavBarFeatures';
+import NavbarFeatures from './NavBarFeatures';
 
 class App extends React.Component{
 
@@ -48,26 +50,36 @@ class App extends React.Component{
         this.setState({order});
     }
 
+    deductFromOrder = key => {
+        const order= {...this.state.order};
+        order[key] = order[key] - 1;
+        this.setState({order});
+    }
+
 
 
     render(){
         return (
-            <div className="Lunchbox-main">
-                <div className="menu">
-                 <Header tagline="Lets order Lunch"/>
-                 <ul className="items">
-                    {Object.keys(this.state.foodItems).map (key => 
-                    <FoodItem 
-                        key={key} 
-                        index = {key}
-                        details={this.state.foodItems[key]} 
-                        addToOrder={this.addToOrder} 
-                        itemId={this.state.foodItems[key]['itemId']}
-                    />  
-                    )}
-                 </ul>
+            <div>
+                <NavbarFeatures />
+                <div className="Lunchbox-main">           
+                    <div className="menu">
+                    <Header tagline="Lets order Lunch"/>
+                    <ul className="items">
+                        {Object.keys(this.state.foodItems).map (key => 
+                        <FoodItem 
+                            key={key} 
+                            index = {key}
+                            details={this.state.foodItems[key]} 
+                            addToOrder={this.addToOrder} 
+                            deductFromOrder = {this.deductFromOrder}
+                            itemId={this.state.foodItems[key]['itemId']}
+                        />  
+                        )}
+                    </ul>
+                    </div>
+                    <Order items={this.state.foodItems} order={this.state.order} token={this.state.token}/>
                 </div>
-                <Order items={this.state.foodItems} order={this.state.order} token={this.state.token}/>
             </div>
         );
     }
