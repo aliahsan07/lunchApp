@@ -1,5 +1,6 @@
 package com.venturedive.rotikhilao.configuration;
 
+import com.venturedive.rotikhilao.filters.JwtAuthenticationFilter;
 import com.venturedive.rotikhilao.filters.JwtTokenAuthenticationFilter;
 import com.venturedive.rotikhilao.filters.OpenIdConnectFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private OAuth2RestTemplate restTemplate;
 
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter();
+    }
+
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -45,24 +51,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // @formatter:off
-        http.cors().and().csrf().disable();
-        ;
+        http.cors().and().csrf().disable()
+        .authorizeRequests().antMatchers("api/login").permitAll();
 
-        // @formatter:on
-//        http.cors().and().csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                // handle an authorized attempts
-//                .exceptionHandling().authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED))
-//                .and()
-//                // Add a filter to validate the tokens with every request
-//                .addFilterAfter(new JwtTokenAuthenticationFilter(jwtConfig), UsernamePasswordAuthenticationFilter.class)
-//                // authorization requests config
-//                .authorizeRequests()
-//                // allow all who are accessing "auth" service
-//                .antMatchers(HttpMethod.POST, jwtConfig.getUri()).permitAll()
-//                // must be an admin if trying to access admin area (authentication is also required here)
-//                .antMatchers("/gallery" + "/admin/**").hasRole("ADMIN")
-//                // Any other request must be authenticated
-//                .anyRequest().authenticated();
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

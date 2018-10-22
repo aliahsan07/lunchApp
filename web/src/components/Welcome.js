@@ -4,6 +4,8 @@ import { GoogleLogin } from 'react-google-login';
 import config from '../config.json';
 import Vendians from '../css/images/Vendians.png';
 import "../css/style.css"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 class Welcome extends Component {
@@ -11,13 +13,14 @@ class Welcome extends Component {
 
     constructor() {
         super();
-        this.state = { isAuthenticated: false, user: null, token: ''};
+        this.state = { isAuthenticated: false, user: null, token: '', name: ''};
     }
 
 
     componentDidUpdate(){
 
         localStorage.setItem("token", this.state.token );
+        localStorage.setItem("name", this.state.name )
         this.props.history.push('');
     }
 
@@ -25,24 +28,6 @@ class Welcome extends Component {
         this.setState({isAuthenticated: false, token: '', user: null})
     };
 
-
-    // facebookResponse = (response) => {
-    //     const tokenBlob = new Blob([JSON.stringify({access_token: response.accessToken}, null, 2)], {type : 'application/json'});
-    //     const options = {
-    //         method: 'POST',
-    //         body: tokenBlob,
-    //         mode: 'cors',
-    //         cache: 'default'
-    //     };
-    //     fetch('http://localhost:4000/api/v1/auth/facebook', options).then(r => {
-    //         const token = r.headers.get('x-auth-token');
-    //         r.json().then(user => {
-    //             if (token) {
-    //                 this.setState({isAuthenticated: true, user, token})
-    //             }
-    //         });
-    //     })
-    // };
 
 
     googleResponse = (response) => {
@@ -62,11 +47,13 @@ class Welcome extends Component {
         fetch('http://localhost:8080/api/login', options).then(r => {
 
             r.json().then(user => {
+                console.log(user)
                 if (user.isAuthorized === "true") {
-                    this.setState({isAuthenticated: true, user, token: user.jwtToken})
+                    this.setState({isAuthenticated: true, user, token: user.jwtToken, name: user.name})        
                     console.log(this.state);
                 }else {
-                    alert("Please use venturedive email address to login");
+                    console.log("Please use venturedive email address to login");
+                    toast("Please use venturedive email address to login",{ autoClose:false, className: 'black-background'});
                 }
             });
             
@@ -102,12 +89,6 @@ class Welcome extends Component {
             ) :
             (
                 <div className="googleButton">
-                    {/* <FacebookLogin
-                        appId={config.FACEBOOK_APP_ID}
-                        autoLoad={false}
-                        fields="name,email,picture"
-                        callback={this.facebookResponse} 
-                        /> */}
                     <GoogleLogin 
                         clientId={config.GOOGLE_CLIENT_ID}
                         buttonText="Login with Google"
@@ -120,7 +101,7 @@ class Welcome extends Component {
         return (
             <div className="Welcome">
                 <img src={Vendians} className="vendImage" />
-                <header className="head"><strong> Roti Khilao (For Vendians)</strong></header>
+                <ToastContainer />
                 {content}
             </div>
         );

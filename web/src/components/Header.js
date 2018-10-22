@@ -3,11 +3,11 @@ import React from 'react';
 const Header = props => (
     <header className="top">
       <h2>
-        Roti Khilao
+        Today's Menu
       </h2>
-      <h3 className="tagline">
+      {/* <h3 className="text-muted">
         <span>{props.tagline}</span>
-      </h3>
+      </h3> */}
     </header>
   );
   

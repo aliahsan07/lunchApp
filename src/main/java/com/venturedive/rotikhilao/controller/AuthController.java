@@ -22,7 +22,7 @@ public class AuthController {
 
 
     @PostMapping(value="/login")
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = {"http://localhost:3000", "http://192.168.106.253.xip.io:3000"})
     public @ResponseBody
     TokenResponse authenticateUser(@RequestBody String body) throws Exception {
 

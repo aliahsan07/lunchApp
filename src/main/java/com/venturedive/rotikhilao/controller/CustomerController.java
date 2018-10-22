@@ -57,7 +57,7 @@ public class CustomerController {
     }
 
     @PostMapping("/orders")
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = {"http://192.168.106.253.xip.io:3000", "http://localhost:3000"})
     public BooleanResponse orderFood(@RequestBody @Valid @NotNull OrderWrapper request) throws Exception {
 
         log.info("ORDER FOOD REQUEST RECEIVED");
@@ -112,7 +112,7 @@ public class CustomerController {
     @GetMapping(value = "/dailymenu")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get daily menu from all vendors")
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = {"http://192.168.106.253.xip.io:3000", "http://localhost:3000"})
     public MenuResponse showMenu(){
 
         return customerService.showMenu();

@@ -80,6 +80,8 @@ public class GoogleTokenVerifier {
         GoogleIdToken idToken = verifier.verify(idTokenString);
         StringBuffer dataFromGoogleAPI = GetData(idTokenString);
 
+        String name = null;
+
         try {
             ObjectMapper mapper = new ObjectMapper();
             String json = dataFromGoogleAPI.toString();
@@ -92,7 +94,9 @@ public class GoogleTokenVerifier {
 
             String userToken = googleService.checkUserExistence(map);
 
-            return generateToken(userToken);
+            name = (String) map.get("name");
+
+            return generateToken(userToken, name);
 
         } catch (JsonGenerationException e) {
             e.printStackTrace();
@@ -104,18 +108,18 @@ public class GoogleTokenVerifier {
             throw new Exception("Error in generating token");
         }
 
-        return generateToken("UNAUTHORIZED");
+        return generateToken("UNAUTHORIZED", name);
 
     }
 
 
-    private TokenResponse generateToken(String content){
+    private TokenResponse generateToken(String content, String name){
 
         if (content.equals("UNAUTHORIZED")){
-            return new TokenResponse("false", "-");
+            return new TokenResponse("false", "-", "-");
         }
 
-        return new TokenResponse("true", content);
+        return new TokenResponse("true", content, name);
     }
 
 

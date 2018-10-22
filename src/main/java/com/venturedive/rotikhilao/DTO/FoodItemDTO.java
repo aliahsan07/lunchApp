@@ -33,4 +33,7 @@ public class FoodItemDTO {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String title;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String imageUrl;
 }

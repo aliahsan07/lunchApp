@@ -1,5 +1,23 @@
 import { API_BASE_URL, ACCESS_TOKEN } from '../constants/constants';
 
+
+const headers = () => {
+    const h = new Headers();
+
+    h.append('Content-Type', 'application/json');
+
+    const session = {
+        token: localStorage.getItem('token')
+    };
+
+    if (session.token){
+        h.append('Authorization', session.token)
+    };
+
+    return h;
+};
+
+
 const request = (options) => {
     const headers = new Headers({
         'Content-Type': 'application/json',
@@ -36,11 +54,22 @@ export function submitOrder(order) {
 
     console.log(JSON.stringify(order));
 
-    return request({
-        url: API_BASE_URL + '/customers/orders',
-        method: 'POST',
-        body: JSON.stringify(order) 
-    })
+    const url = API_BASE_URL + '/customers/orders';
+    const options = {method: 'POST', headers: headers(), body: JSON.stringify(order)};
+
+    return fetch(new Request(url, options));
+}
+
+
+export function getDailyMenu() {
+
+
+    const url = API_BASE_URL + '/customers/dailymenu';
+    const options = { method: 'GET', headers: headers()};
+
+
+    return fetch(new Request(url, options))
+
 }
 
 

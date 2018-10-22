@@ -32,6 +32,9 @@ public class FoodItem implements Serializable {
     @Column(name="status")
     private Short status;
 
+    @Column(name="image_url")
+    private String imageUrl;
+
     @OneToMany(
             mappedBy = "item",
             cascade = CascadeType.ALL,

@@ -19,4 +19,6 @@ public class TokenResponse implements Serializable {
     private String isAuthorized;
 
     private String jwtToken;
+
+    private String name;
 }

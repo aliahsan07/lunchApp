@@ -26,6 +26,7 @@ public class MenuMapper {
             foodItemDTO.setUnitPrice(foodItem.getPrice());
             foodItemDTO.setVendor(foodItem.getVendorId());
             foodItemDTO.setItemId(foodItem.getId());
+            foodItemDTO.setImageUrl(foodItem.getImageUrl());
             wrappedFoodList.add(foodItemDTO);
         }
 
